@@ -1,0 +1,5 @@
+# Anchor workflow correlation to the recorded winning bid
+
+The auction winner is known only at close, while notification delivery, human checkout and webhook retries can happen much later. Persist trace context with accepted bids and durable workflow records, then propagate it through RabbitMQ and checkout boundaries so the actual winning bid anchors the full journey; other bids retain shorter traces.
+
+Use bounded operation spans and causal links across delayed or independently initiated work rather than keeping one span open across auction deadlines and human inactivity. This requires additive durable metadata and complete boundary handling, but preserves attribution through restart/replay without making diagnostic context a prerequisite for business correctness. Stable business IDs remain searchable in Jaeger. Status: accepted and implemented from Part 7 baseline `eb1972c`. Migration 009 adds optional durable context; the shared telemetry workspace implements validation and propagation. The user approved one cohesive implementation.

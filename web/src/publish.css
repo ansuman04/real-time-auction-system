@@ -1,0 +1,27 @@
+.publish-page { max-width: 850px; padding-top: 32px; padding-bottom: 64px; }
+.publish-page h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin: 16px 0; }
+.publish-form { margin-top: 32px; }
+.selling-as { padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-soft); color: var(--ink); line-height: 1.6; }
+.publish-form fieldset { border: 1px solid var(--line); border-radius: 12px; padding: 24px; min-width: 0; }
+.publish-form legend { font-weight: 700; padding: 0 8px; }
+.publish-form label { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; min-width: 0; font-weight: 600; }
+.publish-form input, .publish-form select, .publish-form textarea { box-sizing: border-box; width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 6px; padding: 12px; font: inherit; color: inherit; background: var(--surface, transparent); }
+.publish-form textarea { resize: vertical; }
+.publish-form small { font-weight: 400; }
+.form-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+.publish-button { padding: 12px 24px; border-radius: 6px; font: inherit; cursor: pointer; }
+.publish-button:disabled { cursor: wait; opacity: .65; }
+.field-error, .form-error { color: var(--ink); border-left: 3px solid #d45435; padding-left: 10px; }
+.form-error { margin-top: 20px; padding: 12px; }
+.item-summary h1, .product-card h3, .item-details-grid p, .seller-card strong { overflow-wrap: anywhere; }
+.item-details-grid p { white-space: pre-wrap; }
+.price-row { flex-wrap: wrap; }
+.product-kicker, .product-category, .item-summary .product-category { overflow-wrap: anywhere; }
+.notification-backdrop { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 20px; background: rgb(12 18 27 / 68%); }
+.notification-modal { width: min(100%, 480px); box-sizing: border-box; padding: clamp(24px, 5vw, 40px); border: 1px solid var(--line); border-radius: 14px; background: var(--surface, #fff); color: var(--ink); box-shadow: 0 24px 80px rgb(0 0 0 / 28%); }
+.notification-modal h2 { margin: 8px 0 12px; }
+.notification-modal p:not(.eyebrow) { line-height: 1.65; }
+.notification-modal a { display: inline-block; margin-right: 16px; }
+.notification-modal button { border: 0; border-radius: 6px; padding: 11px 18px; background: var(--ink); color: var(--surface, #fff); font: inherit; cursor: pointer; }
+.notification-modal button:disabled { opacity: .55; cursor: wait; }
+@media (max-width: 600px) { .form-columns { grid-template-columns: 1fr; } .publish-form fieldset { padding: 16px; } }

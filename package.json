@@ -1,0 +1,52 @@
+{
+  "name": "auction-part-8",
+  "private": true,
+  "workspaces": [
+    "server",
+    "web",
+    "stripe-service",
+    "telemetry"
+  ],
+  "scripts": {
+    "_portfolio:db:up": "docker compose up -d --wait postgres",
+    "db:up": "python scripts/run_local.py db:up",
+    "_portfolio:db:down": "docker compose stop postgres",
+    "db:down": "python scripts/run_local.py db:down",
+    "_portfolio:db:reset": "npm run db:down && npm run db:up && npm run migrate",
+    "db:reset": "python scripts/run_local.py db:reset",
+    "_portfolio:migrate": "npm run migrate --workspace server",
+    "migrate": "python scripts/run_local.py migrate",
+    "_portfolio:dev": "concurrently -k -n server,web,close-worker,notification-worker,stripe \"npm run dev --workspace server\" \"npm run dev --workspace web\" \"npm run close-worker --workspace server\" \"npm run notification-worker --workspace server\" \"npm run start --workspace stripe-service\"",
+    "dev": "python scripts/run_local.py dev",
+    "_portfolio:redis:up": "docker compose up -d --wait redis",
+    "redis:up": "python scripts/run_local.py redis:up",
+    "_portfolio:rabbitmq:up": "docker compose up -d --wait rabbitmq",
+    "rabbitmq:up": "python scripts/run_local.py rabbitmq:up",
+    "_portfolio:start": "npm run db:up && npm run redis:up && npm run rabbitmq:up && npm run tracing:up && npm run migrate && npm run dev",
+    "start": "python scripts/run_local.py start",
+    "_portfolio:test": "npm run test --workspace server && npm run test --workspace web",
+    "test": "python scripts/run_local.py test",
+    "_portfolio:test:bidding-war": "node scripts/bidding-war.mjs",
+    "test:bidding-war": "python scripts/run_local.py test:bidding-war",
+    "_portfolio:test:live-review": "node scripts/live-review.mjs",
+    "test:live-review": "python scripts/run_local.py test:live-review",
+    "_portfolio:test:notification-review": "node scripts/notification-review.mjs",
+    "test:notification-review": "python scripts/run_local.py test:notification-review",
+    "_portfolio:test:recovery": "playwright test --config playwright.config.ts",
+    "test:recovery": "python scripts/run_local.py test:recovery",
+    "_portfolio:test:close-worker": "npm run test:close-worker --workspace server",
+    "test:close-worker": "python scripts/run_local.py test:close-worker",
+    "_portfolio:test:notifications": "npm run test:notifications --workspace server",
+    "test:notifications": "python scripts/run_local.py test:notifications",
+    "_portfolio:test:checkout": "npm run test --workspace server -- src/checkout.test.ts && npm run test --workspace stripe-service",
+    "test:checkout": "python scripts/run_local.py test:checkout",
+    "_portfolio:review:checkout": "node scripts/checkout-review.mjs",
+    "review:checkout": "python scripts/run_local.py review:checkout",
+    "_portfolio:tracing:up": "docker compose up -d jaeger",
+    "tracing:up": "python scripts/run_local.py tracing:up"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "concurrently": "^9.2.1"
+  }
+}

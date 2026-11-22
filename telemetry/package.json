@@ -1,0 +1,21 @@
+{
+  "name": "@auction/telemetry",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./tracing.ts",
+    "./node": "./node.ts",
+    "./postgres": "./postgres.ts"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/core": "^2.2.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.211.0",
+    "@opentelemetry/sdk-node": "^0.208.0",
+    "@opentelemetry/sdk-trace-base": "^2.2.0",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.6"
+  }
+}

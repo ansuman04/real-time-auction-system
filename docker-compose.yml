@@ -1,0 +1,43 @@
+name: portfolio-auction
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: auction
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: auction_part_8
+    ports: ["127.0.0.1:55448:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auction -d auction_part_8"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+    volumes: ["postgres_data:/var/lib/postgresql/data"]
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports: ["127.0.0.1:56398:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: auction
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?Set RABBITMQ_PASSWORD in .env}
+      RABBITMQ_DEFAULT_VHOST: auction_part_8
+    ports: ["127.0.0.1:56738:5672", "127.0.0.1:15688:15672"]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    volumes: ["rabbitmq_data:/var/lib/rabbitmq"]
+  jaeger:
+    image: cr.jaegertracing.io/jaegertracing/jaeger:2.23.0
+    ports: ["127.0.0.1:16698:16686", "127.0.0.1:4338:4318"]
+volumes:
+  postgres_data:
+  rabbitmq_data:
