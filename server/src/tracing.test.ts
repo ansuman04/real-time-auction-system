@@ -1,7 +1,7 @@
 import { afterAll, expect, it } from 'vitest';
 import { randomUUID } from 'node:crypto';
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { InMemorySpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { InMemorySpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace';
 import { carrier, currentCarrier, span, traceHeaders, safeAttributes } from '@auction/telemetry';
 import { tracedPool } from '@auction/telemetry/postgres';
 import { buildApp } from './app.js';
@@ -14,7 +14,10 @@ import { buildStripeApp } from '../../stripe-service/src/app.js';
 import { postgresSessionStore } from '../../stripe-service/src/store.js';
 
 const exporter = new InMemorySpanExporter();
-const sdk = new NodeSDK({ autoDetectResources: false, spanProcessors: [new SimpleSpanProcessor(exporter)] });
+const sdk = new NodeSDK({
+  autoDetectResources: false,
+  spanProcessors: [new SimpleSpanProcessor({ exporter })],
+});
 sdk.start();
 const pool = tracedPool({ connectionString: process.env.DATABASE_URL ?? process.env.DATABASE_URL! });
 afterAll(async () => { await pool.end(); await sdk.shutdown(); });
